@@ -43,7 +43,7 @@ class CalificarElServicioMain extends StatelessWidget {
                             SizedBox(
                               height: 18.0,
                             ),
-                            Text("Felicitar por que si",
+                            Text("Felicitar",
                                 style: TextStyle(
                                     fontSize: 25.0,
                                     fontWeight: FontWeight.bold,
