@@ -12,7 +12,7 @@ class _CalcularTiempoState extends State<CalcularTiempo> {
     return Scaffold(
         backgroundColor: Color(0xFF53576e),
         appBar: AppBar(
-          title: Text('Calcula tu '),
+          title: Text('Calcula tu tiempo'),
           backgroundColor: Color(0xFF2a2e43),
         ),
         body: ListView(
