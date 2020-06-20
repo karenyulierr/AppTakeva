@@ -7,6 +7,7 @@ class CalificarElServicioMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _screenSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Color(0xFF53576e),
       appBar: AppBar(
@@ -14,14 +15,14 @@ class CalificarElServicioMain extends StatelessWidget {
         backgroundColor: Color(0xFF2a2e43),
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(0, 54.0, 0, 0),
+        padding: const EdgeInsets.only(top: 44),
         //scrollDirection: Axis.vertical,
         children: <Widget>[
           Container(
             child: Center(
               child: Container(
-                  height: 290.0,
-                  width: 220.0,
+                  height: _screenSize.height * 0.45,
+                  width: _screenSize.width * 0.55,
                   child: InkWell(
                     onTap: () {
                       Navigator.push(context,
@@ -54,13 +55,13 @@ class CalificarElServicioMain extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 40.0,
+            height: 25.0,
           ),
           Container(
             child: Center(
               child: Container(
-                  height: 290.0,
-                  width: 220.0,
+                 height: _screenSize.height * 0.45,
+                  width: _screenSize.width * 0.55,
                   child: InkWell(
                     onTap: () {
                       Navigator.push(context,
