@@ -75,6 +75,7 @@ class _RegistrarState extends State<Registrar> {
 // spacer
             SizedBox(height: 12.0),
             TextFormField(
+              textCapitalization: TextCapitalization.sentences,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
@@ -88,11 +89,12 @@ class _RegistrarState extends State<Registrar> {
             ),
             SizedBox(height: 12.0),
             TextFormField(
+              keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
                 labelText: 'Correo electrónico',
-                icon: Icon(
+                suffixIcon: Icon(
                   Icons.email,
                   color: (Colors.white),
                 ),
