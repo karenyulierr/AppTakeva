@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:tp/ui/principal.dart';
 import 'package:tp/ui/registrar.dart';
 import 'package:tp/ui/recuperar_contrasena.dart';
+import 'package:flutter_signin_button/button_list.dart';
+import 'package:flutter_signin_button/button_view.dart';
 void main() {
   runApp(MaterialApp(
     home: HomeScreen(),
