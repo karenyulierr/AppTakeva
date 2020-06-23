@@ -1,3 +1,9 @@
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:flutter/material.dart';
 import 'package:tp/main.dart';
 import 'package:tp/ui/registrar.dart';
@@ -5,6 +11,7 @@ import 'package:tp/ui/calificar_servicio.dart';
 import 'package:tp/ui/calcular_tiempo.dart';
 import 'package:tp/ui/ver_rutasMain.dart';
 
+import 'login.dart';
 
 void mainPasajero() {
   MaterialApp(
@@ -19,6 +26,23 @@ class PrincipalPasajero extends StatefulWidget {
 }
 
 class _PrincipalPasajeroState extends State<PrincipalPasajero> {
+  SharedPreferences sharedPreferences;
+
+  @override
+  void initState() {
+    super.initState();
+    checkLoginStatus();
+  }
+
+  checkLoginStatus() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences.getString("token") == null) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          (Route<dynamic> route) => false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,146 +51,221 @@ class _PrincipalPasajeroState extends State<PrincipalPasajero> {
         title: Text('TAKEVA'),
         backgroundColor: Color(0xFF2a2e43),
         actions: <Widget>[
-          /*IconButton(
-              icon: Icon(Icons.account_circle),
-              onPressed: () {
-                Navigator.pushNamed(context, "/principal");
-              },
-              iconSize: 34.0,
-            ),*/
+          IconButton(
+            icon: Icon(
+              Icons.exit_to_app,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext buildcontext) {
+                    return AlertDialog(
+                      title: Text("Alerta"),
+                      content: Text("¿Desea cerrar sesión?"),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text("Sí"),
+                          onPressed: () {
+                            sharedPreferences.clear();
+                            sharedPreferences.commit();
+                            Navigator.of(buildcontext).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (BuildContext buildcontext) =>
+                                        LoginPage()),
+                                (Route<dynamic> route) => false);
+                          },
+                        ),
+                        FlatButton(
+                          child: Text("No"),
+                          onPressed: () {
+                            Navigator.pop(context, false);
+                          },
+                        )
+                      ],
+                    );
+                  });
+            },
+            iconSize: 30.0,
+          ),
         ],
       ),
       drawer: Drawer(
         child: Container(
           color: Color(0xFF2a2e43),
-        child: ListView(
-          //padding: EdgeInsets.zero,
-          children: <Widget>[
-            
-            
-            /*DrawerHeader(
+          child: ListView(
+            //padding: EdgeInsets.zero,
+            children: <Widget>[
+              /*DrawerHeader(
               child: Text('Perfil'),
               decoration: BoxDecoration(
                 color: Colors.orange[800],
               ),
             ),*/
-            SizedBox(height: 8.0,),
-            ListTile(
-              
-              leading: Icon(Icons.home, size: 28.0,color: Color(0xFFffb900),),
-              title: Text(
-                'Inicio',
-                style: TextStyle(fontSize: 19.0, color: Colors.white,),
+              SizedBox(
+                height: 8.0,
               ),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            Divider(color: Color(0xFFffb900),),
-            SizedBox(height: 8.0,),
-            ListTile(
-              leading: Icon(Icons.rv_hookup, size: 30.0, color: Color(0xFFffb900),),
-              title: Text(
-                'Ver rutas',
-                style: TextStyle(fontSize: 19.0, color: Colors.white,)
+              ListTile(
+                leading: Icon(
+                  Icons.home,
+                  size: 28.0,
+                  color: Color(0xFFffb900),
+                ),
+                title: Text(
+                  'Inicio',
+                  style: TextStyle(
+                    fontSize: 19.0,
+                    color: Colors.white,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
               ),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => VerRutasMain()));
-              },
-            ),
-            Divider(color: Color(0xFFffb900),),
-            SizedBox(height: 8.0,),
-            ListTile(
-              leading: Icon(Icons.departure_board, size: 28.0, color: Color(0xFFffb900)),
-              title: Text(
-                'Calcula tu tiempo',
-                style: TextStyle(fontSize: 19.0, color: Colors.white,),
+              Divider(
+                color: Color(0xFFffb900),
               ),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CalcularTiempo()));
-              },
-            ),
-            Divider(color: Color(0xFFffb900),),
-            SizedBox(height: 8.0,),
-            ListTile(
-              leading: Icon(Icons.check_box, size: 28.0,color: Color(0xFFffb900),),
-              title: Text(
-                'Calificar servicio',
-                style: TextStyle(fontSize: 19.0, color: Colors.white,),
+              SizedBox(
+                height: 8.0,
               ),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CalificarElServicioMain()));
-                        
-              },
-            ),
-            Divider(color: Color(0xFFffb900),),
-            SizedBox(height: 8.0,),
-            ListTile(
-              leading: Icon(Icons.exit_to_app, size: 28.0,color: Color(0xFFffb900),),
-              title: Text(
-                'Cerrar sesión',
-                style: TextStyle(fontSize: 19.0, color: Colors.white,),
+              ListTile(
+                leading: Icon(
+                  Icons.rv_hookup,
+                  size: 30.0,
+                  color: Color(0xFFffb900),
+                ),
+                title: Text('Ver rutas',
+                    style: TextStyle(
+                      fontSize: 19.0,
+                      color: Colors.white,
+                    )),
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => VerRutasMain()));
+                },
               ),
-              onTap: () {
-                Navigator.pushNamed(context, "/");
-                
-              },
-            ),
-          ],
+              Divider(
+                color: Color(0xFFffb900),
+              ),
+              SizedBox(
+                height: 8.0,
+              ),
+              ListTile(
+                leading: Icon(Icons.departure_board,
+                    size: 28.0, color: Color(0xFFffb900)),
+                title: Text(
+                  'Calcula tu tiempo',
+                  style: TextStyle(
+                    fontSize: 19.0,
+                    color: Colors.white,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CalcularTiempo()));
+                },
+              ),
+              Divider(
+                color: Color(0xFFffb900),
+              ),
+              SizedBox(
+                height: 8.0,
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.check_box,
+                  size: 28.0,
+                  color: Color(0xFFffb900),
+                ),
+                title: Text(
+                  'Calificar servicio',
+                  style: TextStyle(
+                    fontSize: 19.0,
+                    color: Colors.white,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CalificarElServicioMain()));
+                },
+              ),
+              Divider(
+                color: Color(0xFFffb900),
+              ),
+              SizedBox(
+                height: 8.0,
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.exit_to_app,
+                  size: 28.0,
+                  color: Color(0xFFffb900),
+                ),
+                title: Text(
+                  'Cerrar sesión',
+                  style: TextStyle(
+                    fontSize: 19.0,
+                    color: Colors.white,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, "/");
+                },
+              ),
+            ],
+          ),
         ),
-      ),),
+      ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(14.0, 60.0, 14.0, 0),
         scrollDirection: Axis.vertical,
         children: <Widget>[
-          
           Container(
               height: 130,
               child: Card(
-                elevation: 10.0,
-                color: Color(0xFFE1E2E1),
+                  elevation: 10.0,
+                  color: Color(0xFFE1E2E1),
                   child: Center(
-                child: InkWell(
-                  onTap: () {
-                   Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => VerRutasMain()));
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const ListTile(
-                        leading: Flexible(
-                         // fixed width and height
-                          child: Image(
-                            image: AssetImage('assets/rutas.png'),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => VerRutasMain()));
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          const ListTile(
+                            leading: Flexible(
+                              // fixed width and height
+                              child: Image(
+                                image: AssetImage('assets/rutas.png'),
+                              ),
+                            ),
+                            title: Text(
+                              'Ver rutas',
+                              style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF00031c)),
+                            ),
+                            subtitle: Text(
+                              'Consultar información de rutas.',
+                              style: TextStyle(
+                                  fontSize: 16.0, color: Color(0xFF00031c)),
+                            ),
+                            trailing: Icon(Icons.keyboard_arrow_right),
                           ),
-                        ),
-                        title: Text(
-                          'Ver rutas',
-                          style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF00031c)),
-                        ),
-                        subtitle: Text(
-                          'Consultar información de rutas.',
-                          style: TextStyle(
-                              fontSize: 16.0, color: Color(0xFF00031c)),
-                        ),
-                        trailing: Icon(Icons.keyboard_arrow_right),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-              ))),
+                    ),
+                  ))),
           SizedBox(
             height: 30.0,
           ),
@@ -175,48 +274,48 @@ class _PrincipalPasajeroState extends State<PrincipalPasajero> {
             height: 30.0,
           ),
           Container(
-             height: 130,
+              height: 130,
               child: Card(
-                elevation: 10.0,
-                color: Color(0xFFE1E2E1),
+                  elevation: 10.0,
+                  color: Color(0xFFE1E2E1),
                   child: Center(
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CalcularTiempo()));
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const ListTile(
-                        leading: Flexible(
-                          // fixed width and height
-                          child: Image(
-                            width: 55.0,
-                            image: AssetImage('assets/calcular_tiempo.png'),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CalcularTiempo()));
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          const ListTile(
+                            leading: Flexible(
+                              // fixed width and height
+                              child: Image(
+                                width: 55.0,
+                                image: AssetImage('assets/calcular_tiempo.png'),
+                              ),
+                            ),
+                            title: Text(
+                              'Calcula tu tiempo',
+                              style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF00031c)),
+                            ),
+                            subtitle: Text(
+                              'Haz un cálculo previo a tu destino.',
+                              style: TextStyle(
+                                  fontSize: 16.0, color: Color(0xFF00031c)),
+                            ),
+                            trailing: Icon(Icons.keyboard_arrow_right),
                           ),
-                        ),
-                        title: Text(
-                          'Calcula tu tiempo',
-                          style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF00031c)),
-                        ),
-                        subtitle: Text(
-                          'Haz un cálculo previo a tu destino.',
-                          style: TextStyle(
-                              fontSize: 16.0, color: Color(0xFF00031c)),
-                        ),
-                         trailing: Icon(Icons.keyboard_arrow_right),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-              ))),
+                    ),
+                  ))),
           SizedBox(
             height: 30.0,
           ),
@@ -225,47 +324,49 @@ class _PrincipalPasajeroState extends State<PrincipalPasajero> {
             height: 30.0,
           ),
           Container(
-             height: 130,
+              height: 130,
               child: Card(
-                elevation: 10.0,
-                color: Color(0xFFE1E2E1),
+                  elevation: 10.0,
+                  color: Color(0xFFE1E2E1),
                   child: Center(
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CalificarElServicioMain()));
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const ListTile(
-                        leading: Flexible(
-                          // fixed width and height
-                          child: Image(
-                            image: AssetImage('assets/calificar_servicio.png'),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    CalificarElServicioMain()));
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          const ListTile(
+                            leading: Flexible(
+                              // fixed width and height
+                              child: Image(
+                                image:
+                                    AssetImage('assets/calificar_servicio.png'),
+                              ),
+                            ),
+                            title: Text(
+                              'Calificar servicio',
+                              style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF00031c)),
+                            ),
+                            subtitle: Text(
+                              'Ayuda a mejorar el servicio.',
+                              style: TextStyle(
+                                  fontSize: 16.0, color: Color(0xFF00031c)),
+                            ),
+                            trailing: Icon(Icons.keyboard_arrow_right),
                           ),
-                        ),
-                        title: Text(
-                          'Calificar servicio',
-                          style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF00031c)),
-                        ),
-                        subtitle: Text(
-                          'Ayuda a mejorar el servicio.',
-                          style: TextStyle(
-                              fontSize: 16.0, color: Color(0xFF00031c)),
-                        ),
-                         trailing: Icon(Icons.keyboard_arrow_right),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-              ))),
+                    ),
+                  ))),
           SizedBox(
             height: 12,
           ),
