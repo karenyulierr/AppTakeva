@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tp/ui/recuperar_contrasena.dart';
+import 'package:tp/ui/registrar.dart';
 
 import '../main.dart';
 
@@ -71,145 +73,149 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 15.0),
       child: Form(
-      key: _formKey,
-      child: Column(
-        children: <Widget>[
-          
-          TextFormField(
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Este campo no puede estar vacío';
-              }
-              String p = "[a-zA-Z0-9\+\.\_\%\-\+]{1,256}" +
-                  "\\@" +
-                  "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
-                  "(" +
-                  "\\." +
-                  "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
-                  ")+";
-              RegExp regExp = new RegExp(p);
-              if (regExp.hasMatch(value)) {
+        key: _formKey,
+        child: Column(
+          children: <Widget>[
+            TextFormField(
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Este campo no puede estar vacío';
+                }
+                String p = "[a-zA-Z0-9\+\.\_\%\-\+]{1,256}" +
+                    "\\@" +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                    "(" +
+                    "\\." +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                    ")+";
+                RegExp regExp = new RegExp(p);
+                if (regExp.hasMatch(value)) {
+                  return null;
+                }
+                return 'Email suministrado no válido. Intente otro correo electrónico';
+              },
+
+              controller: emailController,
+              //validator: validateEmail,
+              keyboardType: TextInputType.emailAddress,
+
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                labelText: 'Correo electrónico',
+                icon: Icon(
+                  Icons.email,
+                  color: (Colors.white),
+                ),
+              ),
+            ),
+            SizedBox(height: 30.0),
+            TextFormField(
+              controller: passwordController,
+              /* validator: validatePassword, */
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Este campo no puede estar vacío';
+                }
                 return null;
-              }
-              return 'Email suministrado no válido. Intente otro correo electrónico';
-            },
-
-            controller: emailController,
-            //validator: validateEmail,
-            keyboardType: TextInputType.emailAddress,
-
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              labelText: 'Correo electrónico',
-              icon: Icon(
-                Icons.email,
-                color: (Colors.white),
+              },
+              decoration: InputDecoration(
+                filled: true,
+                labelText: 'Contraseña',
+                fillColor: Colors.white,
+                icon: Icon(
+                  Icons.lock,
+                  color: (Colors.white),
+                ),
+              ),
+              obscureText: true,
+            ),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  FlatButton(
+                    child: Text(
+                      'Recuperar contraseña',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => RecuperarContrasena(),
+                      ));
+                    },
+                  ),
+                  FlatButton(
+                    child: Text(
+                      'Registrarse',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => Registrar(),
+                      ));
+                    },
+                  ),
+                ],
               ),
             ),
-          ),
-          SizedBox(height: 30.0),
-          TextFormField(
-            controller: passwordController,
-            /* validator: validatePassword, */
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Este campo no puede estar vacío';
-              }
-              return null;
-            },
-            decoration: InputDecoration(
-              filled: true,
-              labelText: 'Contraseña',
-              fillColor: Colors.white,
-              icon: Icon(
-                Icons.lock,
-                color: (Colors.white),
-              ),
-            ),
-            obscureText: true,
-          ),
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                FlatButton(
-                  child: Text(
-                    'Recuperar contraseña',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/recuperar");
-                  },
-                ),
-                FlatButton(
-                  child: Text(
-                    'Registrarse',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.white),
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/registrar");
-                  },
-                ),
-              ],
-            ),
-          ),
-          RaisedButton(
-            onPressed:
-                /*emailController.text == "" || passwordController.text == ""
+            RaisedButton(
+              onPressed:
+                  /*emailController.text == "" || passwordController.text == ""
                     ? null
                     : */
-                () {
-              setState(() {
-                if (_formKey.currentState.validate()) {
-                _isLoading = true;
-                }
-              });
-              signIn(emailController.text, passwordController.text);
-            },
-            child: Text('INICIAR SESIÓN',
-                style: TextStyle(
-                    color: Colors.black, fontWeight: FontWeight.bold)),
-            color: Color(0xFFffb900),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
+                  () {
+                setState(() {
+                  if (_formKey.currentState.validate()) {
+                    _isLoading = true;
+                  }
+                });
+                signIn(emailController.text, passwordController.text);
+              },
+              child: Text('INICIAR SESIÓN',
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold)),
+              color: Color(0xFFffb900),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
             ),
-          ),
-          SizedBox(height: 10.0),
-          Text("- o -",
-              style: TextStyle(color: Colors.white),
-              textAlign: TextAlign.center),
-          SizedBox(height: 10.0),
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Flexible(
-                  child: SignInButton(
-                    Buttons.Google,
-                    text: "Google",
-                    onPressed: () {},
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+            SizedBox(height: 10.0),
+            Text("- o -",
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center),
+            SizedBox(height: 10.0),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Flexible(
+                    child: SignInButton(
+                      Buttons.Google,
+                      text: "Google",
+                      onPressed: () {},
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
                     ),
                   ),
-                ),
-                Flexible(
-                  child: SignInButton(
-                    Buttons.Facebook,
-                    text: "Facebook",
-                    onPressed: () {},
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                  Flexible(
+                    child: SignInButton(
+                      Buttons.Facebook,
+                      text: "Facebook",
+                      onPressed: () {},
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
-      ),),
+          ],
+        ),
+      ),
     );
   }
 
