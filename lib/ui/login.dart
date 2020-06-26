@@ -20,7 +20,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     Map data = {'email': email, 'password': pass};
     var jsonResponse = null;
-  
+
     var response =
         await http.post("http://192.168.0.115:8000/api/login", body: data);
     if (response.statusCode == 200) {
@@ -183,10 +182,39 @@ class _LoginPageState extends State<LoginPage> {
                 borderRadius: BorderRadius.circular(10.0),
               ),
             ),
-                     await Auth.instance.google();
+            SizedBox(height: 10.0),
+            Text("- o -",
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center),
+            SizedBox(height: 10.0),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Flexible(
+                    child: SignInButton(
+                      Buttons.Google,
+                      text: "Google",
+                      onPressed: () async {
+                        await Auth.instance.google();
+                        print("listo");
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
                     ),
                   ),
-                      Auth.instance.facebook();
+                  Flexible(
+                    child: SignInButton(
+                      Buttons.Facebook,
+                      text: "Facebook",
+                      onPressed: () async {
+                        Auth.instance.facebook();
+                        print("listo");
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
                     ),
                   ),
                 ],
