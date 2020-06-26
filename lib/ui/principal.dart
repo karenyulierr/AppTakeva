@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutter/material.dart';
+import 'package:tp/libs/auth.dart';
 import 'package:tp/main.dart';
 import 'package:tp/ui/registrar.dart';
 import 'package:tp/ui/calificar_servicio.dart';
@@ -21,6 +22,7 @@ void mainPasajero() {
 }
 
 class PrincipalPasajero extends StatefulWidget {
+  static final routeName= 'home';
   @override
   _PrincipalPasajeroState createState() => _PrincipalPasajeroState();
 }
@@ -67,6 +69,7 @@ class _PrincipalPasajeroState extends State<PrincipalPasajero> {
                         FlatButton(
                           child: Text("Sí"),
                           onPressed: () {
+                            Auth.instance.logOut();
                             sharedPreferences.clear();
                             sharedPreferences.commit();
                             Navigator.of(buildcontext).pushAndRemoveUntil(

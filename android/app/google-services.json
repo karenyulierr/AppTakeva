@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "173755857669",
+    "firebase_url": "https://apptakeva.firebaseio.com",
+    "project_id": "apptakeva",
+    "storage_bucket": "apptakeva.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:173755857669:android:e3f4f92075c9e97967156c",
+        "android_client_info": {
+          "package_name": "com.tp.tp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "173755857669-v4ecl3cmp8po8ai2okdcu8ve759vocha.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tp.tp",
+            "certificate_hash": "969002742826b0c8b065d1b279cc5c0acb04ca8a"
+          }
+        },
+        {
+          "client_id": "173755857669-slel7n9c3ibr5mbj2agal3mbk74305jh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGY2Tr6WOteYq6UiQsPQ_p5wiMmNn06F4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "173755857669-slel7n9c3ibr5mbj2agal3mbk74305jh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

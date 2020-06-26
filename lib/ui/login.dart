@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
+import 'package:tp/libs/auth.dart';
 import 'package:tp/ui/principal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,6 +17,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +40,9 @@ class _LoginPageState extends State<LoginPage> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     Map data = {'email': email, 'password': pass};
     var jsonResponse = null;
-
+  
     var response =
-        await http.post("http://192.168.100.35:8000/api/login", body: data);
+        await http.post("http://192.168.0.115:8000/api/login", body: data);
     if (response.statusCode == 200) {
       jsonResponse = json.decode(response.body);
       print('Response status: ${response.statusCode}');
@@ -189,7 +191,10 @@ class _LoginPageState extends State<LoginPage> {
                   child: SignInButton(
                     Buttons.Google,
                     text: "Google",
-                    onPressed: () {},
+                    onPressed: () async{
+                     await Auth.instance.google();
+                     print("listo");
+                    },
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -199,7 +204,10 @@ class _LoginPageState extends State<LoginPage> {
                   child: SignInButton(
                     Buttons.Facebook,
                     text: "Facebook",
-                    onPressed: () {},
+                    onPressed: () async {
+                      Auth.instance.facebook();
+                       print("listo");
+                    },
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
