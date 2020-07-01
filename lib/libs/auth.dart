@@ -9,9 +9,9 @@ class Auth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  Future<FirebaseUser> get user async{
+/*   Future<FirebaseUser> get user async{
     return (await _firebaseAuth.currentUser());
-  }
+  } */
 
   Future<void> facebook() async {
     try {
@@ -55,8 +55,8 @@ class Auth {
       print(e);
     }
   }
-  Future<void> logOut() async {
+ /*  Future<void> logOut() async {
     final String providerId =(await user).providerId;
     print("providerId: $providerId");
-  }
+  } */
 }

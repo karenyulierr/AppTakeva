@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:tp/controllers/db_register.dart';
+import 'package:tp/libs/auth.dart';
 import 'package:tp/ui/login.dart';
 
 class Registrar extends StatefulWidget {
@@ -49,7 +50,10 @@ class _RegistrarState extends State<Registrar> {
                     child: SignInButton(
                       Buttons.Google,
                       text: "Google",
-                      onPressed: () {},
+                     onPressed: () async {
+                        await Auth.instance.google();
+                        print("listo");
+                      },
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
@@ -59,7 +63,10 @@ class _RegistrarState extends State<Registrar> {
                     child: SignInButton(
                       Buttons.Facebook,
                       text: "Facebook",
-                      onPressed: () {},
+                     onPressed: () async {
+                        Auth.instance.facebook();
+                        print("listo");
+                      },
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
