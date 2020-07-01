@@ -14,9 +14,11 @@ class Registrar extends StatefulWidget {
 
 class _RegistrarState extends State<Registrar> {
   DbRegister dbregister = new DbRegister();
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = new TextEditingController();
   final TextEditingController _emailController = new TextEditingController();
   final TextEditingController _passwordController = new TextEditingController();
+  final snackBar = SnackBar(content: Text('Registro exitoso!'));
 
   @override
   Widget build(BuildContext context) {
@@ -75,22 +77,29 @@ class _RegistrarState extends State<Registrar> {
                 ],
               ),
             ),
-
             SizedBox(height: 26.0),
-            TextFormField(
-              controller: _nameController,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                labelText: 'Nombres',
-                icon: Icon(
-                  Icons.edit,
-                  color: (Colors.white),
+            Form(
+              key: _formKey,
+              child: Column(children: <Widget>[
+                TextFormField(
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Este campo no puede estar vacío';
+                    }
+                  },
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: 'Nombres',
+                    icon: Icon(
+                      Icons.edit,
+                      color: (Colors.white),
+                    ),
+                  ),
                 ),
-              ),
-            ),
 // spacer
-            /* SizedBox(height: 12.0),
+                /* SizedBox(height: 12.0),
             TextFormField(
               textCapitalization: TextCapitalization.sentences,
               decoration: InputDecoration(
@@ -104,23 +113,42 @@ class _RegistrarState extends State<Registrar> {
               ),
               obscureText: true,
             ), */
-            SizedBox(height: 12.0),
-            TextFormField(
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                labelText: 'Correo electrónico',
-                icon: Icon(
-                  Icons.email,
-                  color: (Colors.white),
+                SizedBox(height: 12.0),
+                TextFormField(
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Este campo no puede estar vacío';
+                    }
+                    // Regex para validación de email
+                    String p = "[a-zA-Z0-9\+\.\_\%\-\+]{1,256}" +
+                        "\\@" +
+                        "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                        "(" +
+                        "\\." +
+                        "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                        ")+";
+                    RegExp regExp = new RegExp(p);
+                    if (regExp.hasMatch(value)) {
+                      return null;
+                    }
+                    return 'El Email suministrado no es válido. Intente otro correo electrónico';
+                  },
+                  //errorStyle: TextStyle(color: Colors.teal)),
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: 'Correo electrónico',
+                    icon: Icon(
+                      Icons.email,
+                      color: (Colors.white),
+                    ),
+                  ),
+                  obscureText: false,
                 ),
-              ),
-              obscureText: false,
-            ),
-            SizedBox(height: 12.0),
-            /* TextFormField(
+                SizedBox(height: 12.0),
+                /* TextFormField(
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
@@ -133,20 +161,25 @@ class _RegistrarState extends State<Registrar> {
               obscureText: true,
             ),
             SizedBox(height: 12.0), */
-            TextFormField(
-              controller: _passwordController,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                labelText: 'Contraseña',
-                icon: Icon(
-                  Icons.lock,
-                  color: (Colors.white),
+                TextFormField(
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Este campo no puede estar vacío';
+                    }
+                  },
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: 'Contraseña',
+                    icon: Icon(
+                      Icons.lock,
+                      color: (Colors.white),
+                    ),
+                  ),
+                  obscureText: true,
                 ),
-              ),
-              obscureText: true,
-            ),
-            /* SizedBox(height: 12.0),
+                /* SizedBox(height: 12.0),
             TextFormField(
               decoration: InputDecoration(
                 filled: true,
@@ -159,28 +192,50 @@ class _RegistrarState extends State<Registrar> {
               ),
               obscureText: false,
             ), */
-            SizedBox(height: 15.0),
+                SizedBox(height: 15.0),
 
-            RaisedButton(
-              child: Text(
-                'REGISTRARSE',
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-              ),
-              color: Color(0xFFffb900),
-              onPressed: () {
-                dbregister.registerUser(
-                    _nameController.text.trim(),
-                    _emailController.text.trim(),
-                    _passwordController.text.trim());
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => LoginPage(),
-                ));
-              },
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-            ),
+                RaisedButton(
+                  child: Text(
+                    'REGISTRARSE',
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold),
+                  ),
+                  color: Color(0xFFffb900),
+                  onPressed: () {
+                    if (_formKey.currentState.validate()) {
+                      dbregister.registerUser(
+                          _nameController.text.trim(),
+                          _emailController.text.trim(),
+                          _passwordController.text.trim());
+
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext buildcontext) {
+                            return AlertDialog(
+                                title: Text("Registro exitoso!"),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: Text("Ok"),
+                                    onPressed: () {
+                                      Navigator.of(buildcontext)
+                                          .pushAndRemoveUntil(
+                                              MaterialPageRoute(
+                                                  builder: (BuildContext
+                                                          buildcontext) =>
+                                                      LoginPage()),
+                                              (Route<dynamic> route) => false);
+                                    },
+                                  ),
+                                ]);
+                          });
+                    }
+                  },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              ]),
+            )
           ],
         ),
       ),
