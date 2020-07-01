@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class CalcularTiempo extends StatefulWidget {
   @override
@@ -6,9 +7,12 @@ class CalcularTiempo extends StatefulWidget {
 }
 
 class _CalcularTiempoState extends State<CalcularTiempo> {
+  final CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(37.42796133580664, -122.085749655962),
+    zoom: 14.4746,
+  );
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
         backgroundColor: Color(0xFF53576e),
         appBar: AppBar(
@@ -16,45 +20,51 @@ class _CalcularTiempoState extends State<CalcularTiempo> {
           backgroundColor: Color(0xFF2a2e43),
         ),
         body: ListView(
-              scrollDirection: Axis.vertical,
+          scrollDirection: Axis.vertical,
           children: <Widget>[
-            SizedBox(
-              child: Image(
-                  image: AssetImage('assets/calcula.jpeg'), fit: BoxFit.cover),
-            ),
+         Container(
+        
+          height: 260.0,
+          //scrollDirection: Axis.vertical,
+          child: Stack(
+             children: <Widget>[
+               GoogleMap(
+                initialCameraPosition: _kGooglePlex,
+              ),
+          ],),
+        ),
             SizedBox(
               height: 8.0,
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 12.0),
-            child: Container(
-              padding: EdgeInsets.all(14.0),
-              height: 50,
-              decoration: BoxDecoration(
-                  color: Color(0xffEFEFEF),
-                  borderRadius: BorderRadius.circular(14)),
-              child: Row(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(14.0),
-                  ),
-                  Icon(Icons.search),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    "A dónde quieres ir?",
-                    style: TextStyle(color: Colors.grey, fontSize: 19),
-                  )
-                ],
+              child: Container(
+                padding: EdgeInsets.all(14.0),
+                height: 50,
+                decoration: BoxDecoration(
+                    color: Color(0xffEFEFEF),
+                    borderRadius: BorderRadius.circular(14)),
+                child: Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(14.0),
+                    ),
+                    Icon(Icons.search),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "A dónde quieres ir?",
+                      style: TextStyle(color: Colors.grey, fontSize: 19),
+                    )
+                  ],
+                ),
               ),
-            ),),
-
+            ),
 
             /// Best Selling
 
             Container(
-          
               height: 470,
               //padding: EdgeInsets.only(left: 22),
               child: GridView.count(
@@ -70,7 +80,6 @@ class _CalcularTiempoState extends State<CalcularTiempo> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                      
                         AspectRatio(
                             aspectRatio: 22.0 / 9.0,
                             child: Icon(Icons.departure_board,
@@ -107,7 +116,6 @@ class _CalcularTiempoState extends State<CalcularTiempo> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                     
                         AspectRatio(
                             aspectRatio: 22.0 / 9.0,
                             child: Icon(Icons.access_time,
@@ -144,7 +152,6 @@ class _CalcularTiempoState extends State<CalcularTiempo> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                     
                         AspectRatio(
                             aspectRatio: 22.0 / 9.0,
                             child: Icon(Icons.transfer_within_a_station,
