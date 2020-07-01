@@ -69,7 +69,7 @@ class _PrincipalPasajeroState extends State<PrincipalPasajero> {
                         FlatButton(
                           child: Text("Sí"),
                           onPressed: () {
-                            Auth.instance.logOut();
+                          //  Auth.instance.logOut();
                             sharedPreferences.clear();
                             sharedPreferences.commit();
                             Navigator.of(buildcontext).pushAndRemoveUntil(
