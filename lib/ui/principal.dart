@@ -22,7 +22,7 @@ void mainPasajero() {
 }
 
 class PrincipalPasajero extends StatefulWidget {
-  static final routeName= 'home';
+  static final routeName = 'home';
   @override
   _PrincipalPasajeroState createState() => _PrincipalPasajeroState();
 }
@@ -69,7 +69,7 @@ class _PrincipalPasajeroState extends State<PrincipalPasajero> {
                         FlatButton(
                           child: Text("Sí"),
                           onPressed: () {
-                          //  Auth.instance.logOut();
+                            //  Auth.instance.logOut();
                             sharedPreferences.clear();
                             sharedPreferences.commit();
                             Navigator.of(buildcontext).pushAndRemoveUntil(
@@ -216,7 +216,35 @@ class _PrincipalPasajeroState extends State<PrincipalPasajero> {
                   ),
                 ),
                 onTap: () {
-                  Navigator.pushNamed(context, "/");
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext buildcontext) {
+                        return AlertDialog(
+                          title: Text("Alerta"),
+                          content: Text("¿Desea cerrar sesión?"),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text("Sí"),
+                              onPressed: () {
+                                //  Auth.instance.logOut();
+                                sharedPreferences.clear();
+                                sharedPreferences.commit();
+                                Navigator.of(buildcontext).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (BuildContext buildcontext) =>
+                                            LoginPage()),
+                                    (Route<dynamic> route) => false);
+                              },
+                            ),
+                            FlatButton(
+                              child: Text("No"),
+                              onPressed: () {
+                                Navigator.pop(context, false);
+                              },
+                            )
+                          ],
+                        );
+                      });
                 },
               ),
             ],

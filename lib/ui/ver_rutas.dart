@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class VerRutas extends StatefulWidget {
   VerRutas({Key key}) : super(key: key);
@@ -9,11 +9,13 @@ class VerRutas extends StatefulWidget {
 }
 
 class _VerRutasState extends State<VerRutas> {
-
+  final CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(37.42796133580664, -122.085749655962),
+    zoom: 14.4746,
+  );
   @override
   Widget build(BuildContext context) {
-
- return Scaffold(
+    return Scaffold(
         backgroundColor: Color(0xFF53576e),
         appBar: AppBar(
           title: Text('Rutas'),
@@ -21,9 +23,15 @@ class _VerRutasState extends State<VerRutas> {
         ),
         body: ListView(
           children: <Widget>[
-            SizedBox(
-              child: Image(
-                image: AssetImage('assets/rutasFav.jpeg'),
+            Container(
+              height: 260.0,
+              //scrollDirection: Axis.vertical,
+              child: Stack(
+                children: <Widget>[
+                  GoogleMap(
+                    initialCameraPosition: _kGooglePlex,
+                  ),
+                ],
               ),
             ),
             SizedBox(height: 8.0),
