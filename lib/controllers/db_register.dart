@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DbRegister {
-  String serverUrl = "http://192.168.100.35:8000/api/register";
+  String serverUrl = "http://192.168.0.115:8000/api/register";
 
   var status;
   var token;

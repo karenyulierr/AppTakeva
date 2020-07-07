@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 
 class VerRutas extends StatefulWidget {
   VerRutas({Key key}) : super(key: key);
@@ -9,9 +10,28 @@ class VerRutas extends StatefulWidget {
 }
 
 class _VerRutasState extends State<VerRutas> {
-  final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
+  barraBusqueda() {
+    Geolocator().placemarkFromAddress(buscarDireccion).then((result) {
+      mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+          target:
+              LatLng(result[0].position.latitude, result[0].position.longitude),
+          zoom: 18.0)));
+    });
+  }
+
+  void onMapCreated(controller) {
+    setState(() {
+      mapController = controller;
+    });
+  }
+
+  GoogleMapController mapController;
+
+  String buscarDireccion;
+  //Funcion que creamos para busqueda por direccion
+ final CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(2.92994034, -75.28075934),
+    zoom: 15.0,
   );
   @override
   Widget build(BuildContext context) {
@@ -29,6 +49,7 @@ class _VerRutasState extends State<VerRutas> {
               child: Stack(
                 children: <Widget>[
                   GoogleMap(
+                    onMapCreated: onMapCreated,
                     initialCameraPosition: _kGooglePlex,
                   ),
                 ],
@@ -36,28 +57,30 @@ class _VerRutasState extends State<VerRutas> {
             ),
             SizedBox(height: 8.0),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12.0),
+              padding: EdgeInsets.symmetric(horizontal: 8.0),
               child: Container(
-                padding: EdgeInsets.all(14.0),
-                height: 50,
+                height: 50.0,
+                width: double.infinity,
                 decoration: BoxDecoration(
-                    color: Color(0xffEFEFEF),
-                    borderRadius: BorderRadius.circular(14)),
-                child: Row(
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.all(14.0),
+                    borderRadius: BorderRadius.circular(10.0),
+                    color: Colors.white),
+                child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'A dónde quieres ir?',
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+                      suffixIcon: IconButton(
+                          icon: IconButton(
+                        icon: Icon(Icons.search),
+                        onPressed: barraBusqueda,
+                        iconSize: 30.0,
+                      )),
                     ),
-                    Icon(Icons.search),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      "Busca tu ruta",
-                      style: TextStyle(color: Colors.grey, fontSize: 19),
-                    )
-                  ],
-                ),
+                    onChanged: (val) {
+                      setState(() {
+                        buscarDireccion = val + 'neiva';
+                      });
+                    }),
               ),
             ),
             SizedBox(height: 8.0),
