@@ -10,7 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tp/ui/recuperar_contrasena.dart';
 import 'package:tp/ui/registrar.dart';
 
-
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -18,6 +17,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
+  bool _isCorrect = false;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
     var jsonResponse = null;
 
     var response =
-        await http.post("http://192.168.0.115:8000/api/login", body: data);
+        await http.post("http://192.168.100.35:8000/api/login", body: data);
     if (response.statusCode == 200) {
       jsonResponse = json.decode(response.body);
       print('Response status: ${response.statusCode}');
@@ -60,6 +60,7 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       setState(() {
         _isLoading = false;
+        _isCorrect = true;
       });
       print(response.body);
     }
@@ -168,7 +169,32 @@ class _LoginPageState extends State<LoginPage> {
                   () {
                 setState(() {
                   if (_formKey.currentState.validate()) {
-                    _isLoading = true;
+                    _isLoading = false;
+
+                    if (_isCorrect == true) {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext buildcontext) {
+                            return AlertDialog(
+                                title: Text("Advertencia"),
+                                content: Text(
+                                    "El correo o la contraseña son incorrectos."),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: Text("Ok"),
+                                    onPressed: () {
+                                      Navigator.of(buildcontext)
+                                          .pushAndRemoveUntil(
+                                              MaterialPageRoute(
+                                                  builder: (BuildContext
+                                                          buildcontext) =>
+                                                      LoginPage()),
+                                              (Route<dynamic> route) => true);
+                                    },
+                                  ),
+                                ]);
+                          });
+                    } else {}
                   }
                 });
                 signIn(emailController.text, passwordController.text);

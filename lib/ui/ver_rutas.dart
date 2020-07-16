@@ -1,15 +1,31 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'dart:async';
+import 'package:http/http.dart' as http;
+import 'package:tp/ui/rutas_detalle.dart';
 
-class VerRutas extends StatefulWidget {
-  VerRutas({Key key}) : super(key: key);
-
+class ListRutas extends StatefulWidget {
   @override
-  _VerRutasState createState() => _VerRutasState();
+  _ListRutasState createState() => _ListRutasState();
 }
 
-class _VerRutasState extends State<VerRutas> {
+class _ListRutasState extends State<ListRutas> {
+  List data;
+
+  Future<List> getData() async {
+    final response = await http.get("http://192.168.100.35:8000/api/rutas");
+    return json.decode(response.body);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    this.getData();
+  }
+
   barraBusqueda() {
     Geolocator().placemarkFromAddress(buscarDireccion).then((result) {
       mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
@@ -28,139 +44,82 @@ class _VerRutasState extends State<VerRutas> {
   GoogleMapController mapController;
 
   String buscarDireccion;
-  //Funcion que creamos para busqueda por direccion
- final CameraPosition _kGooglePlex = CameraPosition(
+
+  final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(2.92994034, -75.28075934),
     zoom: 15.0,
   );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xFF53576e),
-        appBar: AppBar(
-          title: Text('Rutas'),
-          backgroundColor: Color(0xFF2a2e43),
-        ),
-        body: ListView(
-          children: <Widget>[
-            Container(
-              height: 260.0,
-              //scrollDirection: Axis.vertical,
-              child: Stack(
-                children: <Widget>[
-                  GoogleMap(
-                    onMapCreated: onMapCreated,
-                    initialCameraPosition: _kGooglePlex,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 8.0),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0),
-              child: Container(
-                height: 50.0,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    color: Colors.white),
-                child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'A dónde quieres ir?',
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                      suffixIcon: IconButton(
-                          icon: IconButton(
-                        icon: Icon(Icons.search),
-                        onPressed: barraBusqueda,
-                        iconSize: 30.0,
+      backgroundColor: Color(0xFF53576e),
+      appBar: AppBar(
+        title: Text("Rutas"),
+        backgroundColor: Color(0xFF2a2e43),
+      ),
+      body: FutureBuilder<List>(
+        future: getData(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) print(snapshot.error);
+          return snapshot.hasData
+              ? ItemList(
+                  list: snapshot.data,
+                )
+              : Center(
+                  child: CircularProgressIndicator(),
+                );
+        },
+      ),
+      //])
+    );
+  }
+}
+
+class ItemList extends StatelessWidget {
+  final List list;
+  ItemList({this.list});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: list == null ? 0 : list.length,
+      itemBuilder: (context, i) {
+        return Container(
+          padding: const EdgeInsets.all(10.0),
+          child: GestureDetector(
+            onTap: () => Navigator.of(context).push(
+              new MaterialPageRoute(
+                  builder: (BuildContext context) => new DetalleRutas(
+                        list: list,
+                        index: i,
                       )),
-                    ),
-                    onChanged: (val) {
-                      setState(() {
-                        buscarDireccion = val + 'neiva';
-                      });
-                    }),
+            ),
+            child: Card(
+              elevation: 10.0,
+              child: ListTile(
+                title: Text(
+                  list[i]['codigo'].toString(),
+                  style: TextStyle(
+                    color: Color(0xFF2a2e43),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0,
+                  ),
+                ),
+                subtitle: Text(
+                  list[i]['descripcion'].toString(),
+                  style: TextStyle(
+                    color: Color(0xFF2a2e43),
+                    //fontWeight: FontWeight.bold,
+                    fontSize: 18.0,
+                  ),
+                ),
+                leading: Icon(Icons.directions_bus, color: Color(0xFFc78900)),
+                trailing: Icon(Icons.keyboard_arrow_right),
               ),
             ),
-            SizedBox(height: 8.0),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 12.0),
-              child: Column(
-                children: <Widget>[
-                  Card(
-                    elevation: 10.0,
-                    child: ListTile(
-                      title: Text('Ruta 1',
-                          style: TextStyle(
-                            color: Color(0xFF2a2e43),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18.0,
-                          )),
-                      leading: Icon(Icons.directions_bus),
-                      subtitle: Text('Vía Fortalecillas'),
-                      trailing: Icon(
-                        // Add the lines from here...
-                        Icons.favorite_border,
-                      ), // ... to here.
-                    ),
-                  ),
-                  Card(
-                    elevation: 10.0,
-                    child: ListTile(
-                      title: Text('Ruta 2',
-                          style: TextStyle(
-                            color: Color(0xFF2a2e43),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18.0,
-                          )),
-                      leading: Icon(Icons.directions_bus),
-                      subtitle: Text('Vía comuneros'),
-                      trailing: Icon(
-                        // Add the lines from here...
-                        Icons.favorite,
-                        color: Colors.red,
-                      ), // ... to here.
-                    ),
-                  ),
-                  Card(
-                    elevation: 10.0,
-                    child: ListTile(
-                      title: Text('Ruta 3 ',
-                          style: TextStyle(
-                            color: Color(0xFF2a2e43),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18.0,
-                          )),
-                      leading: Icon(Icons.directions_bus),
-                      subtitle: Text('Vía Norte'),
-                      trailing: Icon(
-                        // Add the lines from here...
-                        Icons.favorite_border,
-                      ), // ... to here.
-                    ),
-                  ),
-                  Card(
-                    elevation: 10.0,
-                    child: ListTile(
-                      title: Text('Ruta 4 ',
-                          style: TextStyle(
-                            color: Color(0xFF2a2e43),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18.0,
-                          )),
-                      leading: Icon(Icons.directions_bus),
-                      subtitle: Text('Vía Norte'),
-                      trailing: Icon(
-                        // Add the lines from here...
-                        Icons.favorite_border,
-                      ), // ... to here.
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ));
+          ),
+        );
+      },
+    );
   }
 }
