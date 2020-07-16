@@ -37,8 +37,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   // TODO: implement build
   Widget build(BuildContext context) {
+    
     return MaterialApp(
-      title: "Codigo Alpha Flutter",
+      
       debugShowCheckedModeBanner: false,
       home: MainPage(),
       theme: ThemeData(accentColor: Colors.white70),

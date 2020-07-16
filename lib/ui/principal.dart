@@ -1,15 +1,10 @@
-import 'dart:convert';
 
-import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutter/material.dart';
-import 'package:tp/libs/auth.dart';
-import 'package:tp/main.dart';
-import 'package:tp/ui/registrar.dart';
 import 'package:tp/ui/calificar_servicio.dart';
 import 'package:tp/ui/calcular_tiempo.dart';
+import 'package:tp/ui/ver_rutas.dart';
 import 'package:tp/ui/ver_rutasMain.dart';
 
 import 'login.dart';
@@ -266,7 +261,7 @@ class _PrincipalPasajeroState extends State<PrincipalPasajero> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => VerRutasMain()));
+                                builder: (context) => ListRutas()));
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,

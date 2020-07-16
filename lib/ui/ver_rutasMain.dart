@@ -27,7 +27,7 @@ class MyBottomNavigatonBar extends StatefulWidget {
 class _MyBottomNavigatonBarState extends State<MyBottomNavigatonBar> {
   int _currentIndex = 0;
   final List<Widget> _children = [
-    VerRutas(),
+    ListRutas(),
     RutasFav(),
   ];
   void onTabTapped(int index) {
