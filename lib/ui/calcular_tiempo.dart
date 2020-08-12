@@ -74,7 +74,7 @@ class _CalcularTiempoState extends State<CalcularTiempo> {
                           icon: Icon(Icons.search),
                           onPressed: barraBusqueda,
                           iconSize: 30.0,
-                        )),
+                        ), onPressed: () {  },),
                       ),
                       onChanged: (val) {
                         setState(() {

@@ -11,6 +11,7 @@ import 'package:tp/ui/recuperar_contrasena.dart';
 import 'package:tp/ui/registrar.dart';
 
 class LoginPage extends StatefulWidget {
+  
   @override
   _LoginPageState createState() => _LoginPageState();
 }
