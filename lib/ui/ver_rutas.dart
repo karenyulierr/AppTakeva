@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
-import 'package:tp/ui/rutas_detalle.dart';
+import 'package:tp/ui/nueva_ruta.dart';
 
 class ListRutas extends StatefulWidget {
   @override
@@ -16,7 +16,7 @@ class _ListRutasState extends State<ListRutas> {
   List data;
 
   Future<List> getData() async {
-    final response = await http.get("http://192.168.100.35:8000/api/rutas");
+    final response = await http.get("http://192.168.0.115:8000/api/rutas");
     return json.decode(response.body);
   }
 
@@ -89,7 +89,7 @@ class ItemList extends StatelessWidget {
           child: GestureDetector(
             onTap: () => Navigator.of(context).push(
               new MaterialPageRoute(
-                  builder: (BuildContext context) => new DetalleRutas(
+                  builder: (BuildContext context) => new NuevaRuta(
                         list: list,
                         index: i,
                       )),

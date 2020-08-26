@@ -7,7 +7,7 @@ import 'package:tp/ui/registrar.dart';
 import 'package:tp/ui/recuperar_contrasena.dart';
 import 'package:tp/ui/request_permiss.dart';
 import 'package:tp/ui/splah.dart';
-import 'package:tp/ui/trazar_ruta.dart';
+
 
 void main() => runApp(HomeScreen());
 
