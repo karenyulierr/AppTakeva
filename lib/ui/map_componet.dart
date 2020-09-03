@@ -1,8 +1,9 @@
-/*import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:tp/Models/pinInformation.dart';
 
 class MapComponet extends StatefulWidget {
-  double pinPillPosition;
-  pinInformation currentlySeletedPin;
+  final double pinPillPosition;
+  final PinInformation currentlySeletedPin;
 
   MapComponet({this.pinPillPosition, this.currentlySeletedPin});
   @override
@@ -16,7 +17,7 @@ class _MapComponetState extends State<MapComponet> {
       bottom: widget.pinPillPosition,
       right: 0,
       left: 0,
-      duration: Duration(milliseconds: 200),
+      duration: Duration(milliseconds: 20),
       child: Align(
           alignment: Alignment.bottomCenter,
           child: Material(
@@ -62,4 +63,3 @@ class _MapComponetState extends State<MapComponet> {
     );
   }
 }
-*/

@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tp/libs/auth.dart';
 import 'package:tp/ui/principal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tp/ui/recuperar_contrasena.dart';
 import 'package:tp/ui/registrar.dart';
 
 class LoginPage extends StatefulWidget {
@@ -22,6 +21,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    MaterialApp(  theme: ThemeData(
+        fontFamily: 'Raleway',
+      ),);
     return Scaffold(
       body: Container(
         color: Color(0xFF2a2e43),
@@ -43,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
     var jsonResponse = null;
 
     var response =
-        await http.post("http://192.168.0.115:8000/api/login", body: data);
+        await http.post("http://192.168.0.106:8000/api/login", body: data);
     if (response.statusCode == 200) {
       jsonResponse = json.decode(response.body);
       print('Response status: ${response.statusCode}');
@@ -134,24 +136,13 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Container(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  FlatButton(
-                    child: Text(
-                      'Recuperar contraseña',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => RecuperarContrasena(),
-                      ));
-                    },
-                  ),
                   FlatButton(
                     child: Text(
                       'Registrarse',
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.white),
+                          fontWeight: FontWeight.bold, color: Colors.white, fontSize: 16),
                     ),
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(

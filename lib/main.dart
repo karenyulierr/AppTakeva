@@ -1,13 +1,8 @@
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:tp/ui/login.dart';
-import 'package:tp/ui/principal.dart';
-import 'package:tp/ui/registrar.dart';
-import 'package:tp/ui/recuperar_contrasena.dart';
 import 'package:tp/ui/request_permiss.dart';
 import 'package:tp/ui/splah.dart';
-
 
 void main() => runApp(HomeScreen());
 
@@ -17,7 +12,7 @@ class HomeScreen extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(accentColor: Colors.white70),
-       home: SplashPage(),
+      home: SplashPage(),
       routes: {
         MainPage.routeName: (_) => MainPage(),
         RequestPermissionPage.routeName: (_) => RequestPermissionPage(),

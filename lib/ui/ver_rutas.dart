@@ -5,7 +5,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
+import 'package:tp/conf/favorito.dart';
 import 'package:tp/ui/nueva_ruta.dart';
+
+//ServerController _serverController = ServerController();
 
 class ListRutas extends StatefulWidget {
   @override
@@ -16,7 +19,7 @@ class _ListRutasState extends State<ListRutas> {
   List data;
 
   Future<List> getData() async {
-    final response = await http.get("http://192.168.0.115:8000/api/rutas");
+    final response = await http.get("http://192.168.0.106:8000/api/rutas");
     return json.decode(response.body);
   }
 
@@ -92,31 +95,34 @@ class ItemList extends StatelessWidget {
                   builder: (BuildContext context) => new NuevaRuta(
                         list: list,
                         index: i,
+                       // _serverController,
                       )),
             ),
-            child: Card(
-              elevation: 10.0,
-              child: ListTile(
-                title: Text(
-                  list[i]['codigo'].toString(),
-                  style: TextStyle(
-                    color: Color(0xFF2a2e43),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Card(
+                    elevation: 10.0,
+                    child: ListTile(
+                      title: Text(
+                        "Ruta " +
+                            list[i]['codigo'].toString() +
+                            ": " +
+                            list[i]['nombreRutaInicio'].toString() +
+                            " - " +
+                            list[i]['nombreRutaFin'].toString(),
+                        style: TextStyle(
+                          color: Color(0xFF2a2e43),
+                          fontSize: 18.0,
+                        ),
+                      ),
+                      leading:
+                          Icon(Icons.directions_bus, color: Color(0xFFc78900)),
+                      trailing: Icon(Icons.keyboard_arrow_right),
+                    ),
                   ),
-                ),
-                subtitle: Text(
-                  list[i]['descripcion'].toString(),
-                  style: TextStyle(
-                    color: Color(0xFF2a2e43),
-                    //fontWeight: FontWeight.bold,
-                    fontSize: 18.0,
-                  ),
-                ),
-                leading: Icon(Icons.directions_bus, color: Color(0xFFc78900)),
-                trailing: Icon(Icons.keyboard_arrow_right),
-              ),
-            ),
+                ]),
           ),
         );
       },

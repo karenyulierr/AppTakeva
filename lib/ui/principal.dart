@@ -1,17 +1,17 @@
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutter/material.dart';
 import 'package:tp/ui/calificar_servicio.dart';
 import 'package:tp/ui/calcular_tiempo.dart';
+import 'package:tp/ui/rutas_fav.dart';
 import 'package:tp/ui/ver_rutas.dart';
 import 'package:tp/ui/ver_rutasMain.dart';
-
 import 'login.dart';
-
 void mainPasajero() {
   MaterialApp(
-    theme: ThemeData(fontFamily: 'Raleway'),
+     theme: ThemeData(
+        fontFamily: 'Raleway',
+      ),
     debugShowCheckedModeBanner: false,
   );
 }
@@ -149,6 +149,30 @@ class _PrincipalPasajeroState extends State<PrincipalPasajero> {
                 height: 8.0,
               ),
               ListTile(
+                leading: Icon(
+                  Icons.favorite,
+                  size: 28.0,
+                  color: Color(0xFFffb900),
+                ),
+                title: Text(
+                  'Rutas favoritas',
+                  style: TextStyle(
+                    fontSize: 19.0,
+                    color: Colors.white,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => RutasFav()));
+                },
+              ),
+              Divider(
+                color: Color(0xFFffb900),
+              ),
+              SizedBox(
+                height: 8.0,
+              ),
+              ListTile(
                 leading: Icon(Icons.departure_board,
                     size: 28.0, color: Color(0xFFffb900)),
                 title: Text(
@@ -247,7 +271,7 @@ class _PrincipalPasajeroState extends State<PrincipalPasajero> {
         ),
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(14.0, 60.0, 14.0, 0),
+        padding: const EdgeInsets.fromLTRB(14.0, 35.0, 14.0, 0),
         scrollDirection: Axis.vertical,
         children: <Widget>[
           Container(
@@ -282,7 +306,7 @@ class _PrincipalPasajeroState extends State<PrincipalPasajero> {
                                   color: Color(0xFF00031c)),
                             ),
                             subtitle: Text(
-                              'Consultar información de rutas.',
+                              'Consulta las rutas y escoge tus favoritas.',
                               style: TextStyle(
                                   fontSize: 16.0, color: Color(0xFF00031c)),
                             ),
@@ -293,11 +317,60 @@ class _PrincipalPasajeroState extends State<PrincipalPasajero> {
                     ),
                   ))),
           SizedBox(
-            height: 30.0,
+            height: 20.0,
           ),
           Divider(color: Color(0xFFffb900)),
           SizedBox(
-            height: 30.0,
+            height: 20.0,
+          ),
+          Container(
+              height: 130,
+              child: Card(
+                  elevation: 10.0,
+                  color: Color(0xFFE1E2E1),
+                  child: Center(
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RutasFav()));
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          const ListTile(
+                            leading: Flexible(
+                              // fixed width and height
+                              child: Image(
+                                image: AssetImage('assets/rutas.png'),
+                              ),
+                            ),
+                            title: Text(
+                              'Rutas favoritas',
+                              style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF00031c)),
+                            ),
+                            subtitle: Text(
+                              'Todas tus rutas favoritas.',
+                              style: TextStyle(
+                                  fontSize: 16.0, color: Color(0xFF00031c)),
+                            ),
+                            trailing: Icon(Icons.keyboard_arrow_right),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ))),
+          SizedBox(
+            height: 20.0,
+          ),
+          Divider(color: Color(0xFFffb900)),
+          SizedBox(
+            height: 20.0,
           ),
           Container(
               height: 130,
@@ -332,7 +405,7 @@ class _PrincipalPasajeroState extends State<PrincipalPasajero> {
                                   color: Color(0xFF00031c)),
                             ),
                             subtitle: Text(
-                              'Haz un cálculo previo a tu destino.',
+                              'Haz el cálculo de tu distacia y tiempo previo a tu destino.',
                               style: TextStyle(
                                   fontSize: 16.0, color: Color(0xFF00031c)),
                             ),
@@ -343,11 +416,11 @@ class _PrincipalPasajeroState extends State<PrincipalPasajero> {
                     ),
                   ))),
           SizedBox(
-            height: 30.0,
+            height: 20.0,
           ),
           Divider(color: Color(0xFFffb900)),
           SizedBox(
-            height: 30.0,
+            height: 20.0,
           ),
           Container(
               height: 130,
