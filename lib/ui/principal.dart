@@ -344,7 +344,7 @@ class _PrincipalPasajeroState extends State<PrincipalPasajero> {
                             leading: Flexible(
                               // fixed width and height
                               child: Image(
-                                image: AssetImage('assets/rutas.png'),
+                                image: AssetImage('assets/favorito.png'),
                               ),
                             ),
                             title: Text(
