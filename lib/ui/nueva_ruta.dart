@@ -2,22 +2,33 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:tp/Models/pinInformation.dart';
-import 'package:tp/conf/favorito.dart';
-
+import 'dart:convert';
+import 'dart:async';
+import 'package:http/http.dart' as http;
+import 'package:tp/controllers/db_barrio.dart';
 
 class NuevaRuta extends StatefulWidget {
- // ServerController serverController;
+  // ServerController serverController;
   @override
   _NuevaRutaState createState() => _NuevaRutaState();
+
   List list;
   int index;
-  NuevaRuta({this.index, this.list, });
+  NuevaRuta({
+    this.index,
+    this.list,
+  });
 }
 
 class _NuevaRutaState extends State<NuevaRuta> {
+  List data;
+
+  Future getData(int $id) async {
+   // final response = await http.get("http://192.168.0.101:8000/api/barrio/$id");
+   
+   // return json.decode(response.body);
+  }
+
   bool favorito;
   GoogleMapController _controller;
   Set<Marker> _markers = {};
@@ -29,6 +40,7 @@ class _NuevaRutaState extends State<NuevaRuta> {
   @override
   void initState() {
     super.initState();
+    //this.getData(index);
   }
 
   Widget build(BuildContext context) {
@@ -39,13 +51,13 @@ class _NuevaRutaState extends State<NuevaRuta> {
             "Ruta " +
                 widget.list[widget.index]['codigo'].toString() +
                 ": " +
-                widget.list[widget.index]['nombreRutaInicio'].toString() +
+                widget.list[widget.index]['idBarrioInicia'].toString() +
                 " - " +
-                widget.list[widget.index]['nombreRutaFin'].toString(),
+                widget.list[widget.index]['idBarrioTermina'].toString(),
           ),
           backgroundColor: Color(0xFF2a2e43),
           actions: <Widget>[
-          // getFavoriteWidget(),
+            // getFavoriteWidget(),
           ],
         ),
         body: Stack(children: <Widget>[
@@ -66,10 +78,8 @@ class _NuevaRutaState extends State<NuevaRuta> {
             ),
           ),
         ]));
-
   }
-  
-    
+
   void _onMapCreated(GoogleMapController controller) {
     _controller = controller;
     setMapPins();
@@ -134,7 +144,8 @@ class _NuevaRutaState extends State<NuevaRuta> {
   }
 
   void setPolylines() async {
-    List<PointLatLng>  pathLines = polylinePoints?.decodePolyline(widget.list[widget.index]['ruta']);
+    List<PointLatLng> pathLines = polylinePoints
+        ?.decodePolyline(widget.list[widget.index]['recorridoRuta']);
     /*PolylineResult result = await polylinePoints?.getRouteBetweenCoordinates(
       googleAPIKey,
       PointLatLng(SOURCE_LOCATION.latitude, SOURCE_LOCATION.longitude),
@@ -165,7 +176,7 @@ class _NuevaRutaState extends State<NuevaRuta> {
       _polylines.add(polyline);
     });
   }
- /*  Widget getFavoriteWidget() {
+  /*  Widget getFavoriteWidget() {
     if (favorito != null) {
       if (favorito) {
         return IconButton(
@@ -212,4 +223,3 @@ class _NuevaRutaState extends State<NuevaRuta> {
   } */
 
 }
-  

@@ -5,10 +5,9 @@ import 'dart:async';
 
 class DbRutas {
   String serverUrl = "http://192.168.0.101:8000/api";
-  String serverUrlrutas = "http://192.168.0.101:8000/api/rutas";
+  String serverUrlrutas = "http://192.168.0.101:8000/api/barrio";
 
   var status;
-
   var token;
   //create function for login
   loginData(String email, String password) async {

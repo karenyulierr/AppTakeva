@@ -5,14 +5,20 @@ class Felicitar extends StatefulWidget {
   _FelicitarState createState() => _FelicitarState();
 }
 
-bool item1 = false;
-bool item2 = false;
-bool item3 = false;
-bool item4 = false;
-bool item5 = false;
 bool item6 = false;
+bool item7 = false;
+bool item8 = false;
+bool item9 = false;
+bool item10 = false;
+
+int valor6=0;
+int valor7=0;
+int valor8=0;
+int valor9=0;
+int valor10=0;
 
 class _FelicitarState extends State<Felicitar> {
+  final TextEditingController _otraController = new TextEditingController();
   TextStyle estiloTexto = new TextStyle(fontSize: 18, color: Color(0xFF00031c));
   @override
   Widget build(BuildContext context) {
@@ -58,10 +64,15 @@ class _FelicitarState extends State<Felicitar> {
                     Row(
                       children: <Widget>[
                         Checkbox(
-                          value: item1,
+                          value: item6,
                           onChanged: (bool value) {
+                            //print(value);
                             setState(() {
-                              item1 = value;
+                              if(value == true){
+                                valor6 = 1;
+                              }else{
+                                valor6 = 0;
+                              }
                             });
                           },
                         ),
@@ -79,10 +90,15 @@ class _FelicitarState extends State<Felicitar> {
                     Row(
                       children: <Widget>[
                         Checkbox(
-                          value: item2,
+                          value: item7,
                           onChanged: (bool value) {
+                            //print(value);
                             setState(() {
-                              item2 = value;
+                              if(value == true){
+                                valor7 = 1;
+                              }else{
+                                valor7 = 0;
+                              }
                             });
                           },
                         ),
@@ -99,10 +115,15 @@ class _FelicitarState extends State<Felicitar> {
                     Row(
                       children: <Widget>[
                         Checkbox(
-                          value: item3,
+                          value: item8,
                           onChanged: (bool value) {
+                            //print(value);
                             setState(() {
-                              item3 = value;
+                              if(value == true){
+                                valor8 = 1;
+                              }else{
+                                valor8 = 0;
+                              }
                             });
                           },
                         ),
@@ -119,10 +140,15 @@ class _FelicitarState extends State<Felicitar> {
                     Row(
                       children: <Widget>[
                         Checkbox(
-                          value: item4,
+                          value: item9,
                           onChanged: (bool value) {
+                            //print(value);
                             setState(() {
-                              item4 = value;
+                              if(value == true){
+                                valor9 = 1;
+                              }else{
+                                valor9 = 0;
+                              }
                             });
                           },
                         ),
@@ -140,10 +166,15 @@ class _FelicitarState extends State<Felicitar> {
                     Row(
                       children: <Widget>[
                         Checkbox(
-                          value: item5,
+                          value: item10,
                           onChanged: (bool value) {
+                            //print(value);
                             setState(() {
-                              item5 = value;
+                              if(value == true){
+                                valor10 = 1;
+                              }else{
+                                valor10 = 0;
+                              }
                             });
                           },
                         ),
@@ -158,6 +189,7 @@ class _FelicitarState extends State<Felicitar> {
                     Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: TextFormField(
+                        controller: _otraController,
                         maxLines: 4,
                         decoration: InputDecoration(
                           hintText: 'Añadir otra calificación',
