@@ -1,20 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:tp/Models/FormularioFelicitarModel.dart';
 
 class Felicitar extends StatefulWidget {
   @override
   _FelicitarState createState() => _FelicitarState();
 }
 
-bool item1 = false;
-bool item2 = false;
-bool item3 = false;
-bool item4 = false;
-bool item5 = false;
-bool item6 = false;
-
 class _FelicitarState extends State<Felicitar> {
-  TextStyle estiloTexto = new TextStyle(fontSize: 18, color: Color(0xFF00031c));
+  List<FormularioFelicitarModel> felicitarList;
+  FormularioFelicitarModel selectedFelicitar;
+
+  setFormularioFelicitarModel(FormularioFelicitarModel felicitar) {
+    setState(() {
+      selectedFelicitar = felicitar;
+    });
+  }
+
   @override
+  void initState() {
+    super.initState();
+    felicitarList = FormularioFelicitarModel.getFelicitar();
+  }
+
+  List<Widget> createRadioListFelicitar() {
+    List<Widget> widgets = [];
+    for (FormularioFelicitarModel felicitar in felicitarList) {
+      widgets.add(
+        RadioListTile(
+          value: felicitar,
+          groupValue: selectedFelicitar,
+          title: Text(felicitar.name),
+          onChanged: (current) {
+            setFormularioFelicitarModel(current);
+          },
+          selected: selectedFelicitar == felicitar,
+          activeColor: Colors.orangeAccent,
+        ),
+      );
+    }
+    return widgets;
+  }
+
+  final TextEditingController _otraController = new TextEditingController();
+  TextStyle estiloTexto = new TextStyle(fontSize: 18, color: Color(0xFF00031c));
+
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Color(0xFF53576e),
@@ -48,116 +77,22 @@ class _FelicitarState extends State<Felicitar> {
                       height: 10.0,
                     ),
                     Flexible(
-                    child: Text(
-                      'Seleccione los ítems necesarios para calificar el servicio: ',
-                      style: estiloTexto,textAlign: TextAlign.center,
-                    ),),
+                      child: Text(
+                        'Seleccione los ítems necesarios para calificar el servicio: ',
+                        style: estiloTexto,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                     SizedBox(
                       height: 20,
                     ),
-                    Row(
-                      children: <Widget>[
-                        Checkbox(
-                          value: item1,
-                          onChanged: (bool value) {
-                            setState(() {
-                              item1 = value;
-                            });
-                          },
-                        ),
-                       Flexible(
-                        child:Text(
-                          "Trato amable y cordial",
-                          style: estiloTexto,
-                        ),),
-                      ],
+                       Column(
+                      children: createRadioListFelicitar(),
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    // [Tuesday] checkbox
-                    Row(
-                      children: <Widget>[
-                        Checkbox(
-                          value: item2,
-                          onChanged: (bool value) {
-                            setState(() {
-                              item2 = value;
-                            });
-                          },
-                        ),
-                          Flexible(
-                        child:Text(
-                          "Conduce con prudencia",
-                          style: estiloTexto,
-                        ),),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Checkbox(
-                          value: item3,
-                          onChanged: (bool value) {
-                            setState(() {
-                              item3 = value;
-                            });
-                          },
-                        ),
-                          Flexible(
-                        child:Text(
-                          "Respeta las señales de tránsito",
-                          style: estiloTexto,
-                        ),),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Checkbox(
-                          value: item4,
-                          onChanged: (bool value) {
-                            setState(() {
-                              item4 = value;
-                            });
-                          },
-                        ),
-                         Flexible(
-                        child:Text(
-                          "Vehículo limpio",
-                          style: estiloTexto,
-                        ),),
-                      ],
-                    ),
-
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Checkbox(
-                          value: item5,
-                          onChanged: (bool value) {
-                            setState(() {
-                              item5 = value;
-                            });
-                          },
-                        ),
-                          Flexible(
-                        child:Text(
-                          "Viaje agradable, tranquilo y seguro",
-                          style: estiloTexto,
-                        ),),
-                      ],
-                    ),
-
                     Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: TextFormField(
+                        controller: _otraController,
                         maxLines: 4,
                         decoration: InputDecoration(
                           hintText: 'Añadir otra calificación',

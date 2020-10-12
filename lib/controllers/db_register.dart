@@ -8,13 +8,14 @@ class DbRegister {
   var status;
   var token;
 
-  registerUser(String _nameController, String _emailController, String _passwordController) async{
-    String myUrl="$serverUrl";
-    final response = await http.post(myUrl, 
-    headers: {
+  registerUser(String _nameController, String _emailController,
+      String _passwordController) async {
+        int idTercero=1;
+    String myUrl = "$serverUrl";
+    final response = await http.post(myUrl, headers: {
       'Accept': 'application/json'
-    },
-    body: {
+    }, body: {
+      "idTercero": "$idTercero",
       "name": "$_nameController",
       "email": "$_emailController",
       "password": "$_passwordController"
@@ -23,10 +24,9 @@ class DbRegister {
 
     var data = json.decode(response.body);
 
-    if(status){
+    if (status) {
       print('data : ${data["error"]}');
-    }
-    else{
+    } else {
       print('data : ${data["token"]}');
       _save(data["token"]);
     }
@@ -36,6 +36,6 @@ class DbRegister {
     final prefs = await SharedPreferences.getInstance();
     final key = 'token';
     final value = token;
-    prefs.setString(key, value); 
+    prefs.setString(key, value);
   }
 }

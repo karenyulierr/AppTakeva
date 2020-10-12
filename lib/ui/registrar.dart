@@ -87,6 +87,7 @@ class _RegistrarState extends State<Registrar> {
                       return 'Este campo no puede estar vacío';
                     }
                   },
+
                   controller: _nameController,
                   decoration: InputDecoration(
                     filled: true,

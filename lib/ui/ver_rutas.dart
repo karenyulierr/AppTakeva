@@ -5,7 +5,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
-//import 'package:tp/conf/favorito.dart';
+
+
 import 'package:tp/ui/nueva_ruta.dart';
 
 //ServerController _serverController = ServerController();
@@ -114,6 +115,7 @@ class ItemList extends StatelessWidget {
                       style: TextStyle(
                         color: Color(0xFF2a2e43),
                         fontSize: 18.0,
+
                       ),
                     ),
                     leading:
