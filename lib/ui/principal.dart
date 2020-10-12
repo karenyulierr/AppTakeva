@@ -1,6 +1,8 @@
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutter/material.dart';
+import 'package:tp/controllers/favoritosProvider.dart';
 import 'package:tp/ui/calificar_servicio.dart';
 import 'package:tp/ui/calcular_tiempo.dart';
 import 'package:tp/ui/rutas_fav.dart';
@@ -42,7 +44,9 @@ class _PrincipalPasajeroState extends State<PrincipalPasajero> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    
+    return 
+      Scaffold(
       backgroundColor: Color(0xFF53576e),
       appBar: AppBar(
         title: Text('TAKEVA'),
@@ -163,7 +167,7 @@ class _PrincipalPasajeroState extends State<PrincipalPasajero> {
                 ),
                 onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => RutasFav()));
+                      MaterialPageRoute(builder: (context) => RutasFav.create(context: context)));
                 },
               ),
               Divider(
@@ -334,7 +338,7 @@ class _PrincipalPasajeroState extends State<PrincipalPasajero> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => RutasFav()));
+                                builder: (context) => RutasFav.create(context: context)));
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -390,6 +394,7 @@ class _PrincipalPasajeroState extends State<PrincipalPasajero> {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           const ListTile(
+                            isThreeLine: true,
                             leading: Flexible(
                               // fixed width and height
                               child: Image(
@@ -405,7 +410,7 @@ class _PrincipalPasajeroState extends State<PrincipalPasajero> {
                                   color: Color(0xFF00031c)),
                             ),
                             subtitle: Text(
-                              'Haz el cálculo de tu distacia y tiempo previo a tu destino.',
+                              'Haz el cálculo de tu distacia y tiempo.',
                               style: TextStyle(
                                   fontSize: 16.0, color: Color(0xFF00031c)),
                             ),
@@ -471,6 +476,6 @@ class _PrincipalPasajeroState extends State<PrincipalPasajero> {
           ),
         ],
       ),
-    );
+      );
   }
 }

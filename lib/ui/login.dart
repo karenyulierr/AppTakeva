@@ -42,10 +42,10 @@ class _LoginPageState extends State<LoginPage> {
   signIn(String email, pass) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     Map data = {'email': email, 'password': pass};
-    var jsonResponse = null;
+    var jsonResponse;
 
     var response =
-        await http.post("http://192.168.0.106:8000/api/login", body: data);
+        await http.post("http://192.168.0.6:8000/api/login", body: data);
     if (response.statusCode == 200) {
       jsonResponse = json.decode(response.body);
       print('Response status: ${response.statusCode}');

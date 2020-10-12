@@ -28,18 +28,24 @@ class _MyBottomNavigatonBarState extends State<MyBottomNavigatonBar> {
   int _currentIndex = 0;
   final List<Widget> _children = [
     ListRutas(),
-    RutasFav(),
+    Container(),
   ];
   void onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
     });
   }
-
+  Widget buildWidgeet(context){
+    if(_currentIndex == 1){
+      return RutasFav.create(context: context);
+    }else{
+      return _children[_currentIndex];
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _children[_currentIndex],
+      body: buildWidgeet(context),
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: onTabTapped,

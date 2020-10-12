@@ -1,5 +1,7 @@
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:tp/controllers/favoritosProvider.dart';
 import 'package:tp/ui/login.dart';
 import 'package:tp/ui/request_permiss.dart';
 import 'package:tp/ui/splah.dart';
@@ -9,14 +11,19 @@ void main() => runApp(HomeScreen());
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(accentColor: Colors.white70),
-      home: SplashPage(),
-      routes: {
-        MainPage.routeName: (_) => MainPage(),
-        RequestPermissionPage.routeName: (_) => RequestPermissionPage(),
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => FavoritosProvider()),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(accentColor: Colors.white70),
+        home: SplashPage(),
+        routes: {
+          MainPage.routeName: (_) => MainPage(),
+          RequestPermissionPage.routeName: (_) => RequestPermissionPage(),
+        },
+      ),
     );
   }
 }
@@ -47,6 +54,6 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return LoginPage();
   }
 }

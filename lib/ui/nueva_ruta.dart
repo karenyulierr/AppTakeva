@@ -2,10 +2,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:tp/Models/pinInformation.dart';
-import 'package:tp/conf/favorito.dart';
+import 'package:provider/provider.dart';
+import 'package:tp/controllers/favoritosProvider.dart';
+//import 'package:tp/conf/favorito.dart';
 
 
 class NuevaRuta extends StatefulWidget {
@@ -14,7 +13,7 @@ class NuevaRuta extends StatefulWidget {
   _NuevaRutaState createState() => _NuevaRutaState();
   List list;
   int index;
-  NuevaRuta({this.index, this.list, });
+  NuevaRuta({this.index, this.list});
 }
 
 class _NuevaRutaState extends State<NuevaRuta> {
@@ -25,13 +24,15 @@ class _NuevaRutaState extends State<NuevaRuta> {
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints = PolylinePoints();
   String googleAPIKey = "AIzaSyDNeemffjVc_VKcOThJ-6f8sBKUdS8QSsY";
-
+  FavoritosProvider favoritosProvider;
   @override
   void initState() {
     super.initState();
   }
 
   Widget build(BuildContext context) {
+    favoritosProvider = Provider.of<FavoritosProvider>(context);
+    bool favoritos = favoritosProvider.obtenerFavorito(widget.list[widget.index]);
     return Scaffold(
         backgroundColor: Color(0xFF53576e),
         appBar: AppBar(
@@ -39,13 +40,18 @@ class _NuevaRutaState extends State<NuevaRuta> {
             "Ruta " +
                 widget.list[widget.index]['codigo'].toString() +
                 ": " +
-                widget.list[widget.index]['nombreRutaInicio'].toString() +
+                widget.list[widget.index]['barrio_inicia']['descripcion'].toString() +
                 " - " +
-                widget.list[widget.index]['nombreRutaFin'].toString(),
+                widget.list[widget.index]['barrio_termina']['descripcion'].toString(),
           ),
           backgroundColor: Color(0xFF2a2e43),
           actions: <Widget>[
-          // getFavoriteWidget(),
+            IconButton(
+              icon: favoritos ? Icon(Icons.favorite,color: Colors.red,) : Icon(Icons.favorite_border), 
+              onPressed: (){
+                favoritosProvider.gestionarFavorito(widget.list[widget.index]);
+              }
+            )
           ],
         ),
         body: Stack(children: <Widget>[
@@ -55,8 +61,8 @@ class _NuevaRutaState extends State<NuevaRuta> {
               myLocationButtonEnabled: true,
               markers: _markers,
               initialCameraPosition: CameraPosition(
-                target: LatLng(widget.list[widget.index]['rutaIniLatitud'],
-                    widget.list[widget.index]['rutaIniLongitud']),
+                target: LatLng(widget.list[widget.index]['barrio_inicia']['latitud'],
+                    widget.list[widget.index]['barrio_inicia']['longitud']),
                 zoom: 10,
               ),
               polylines: _polylines,
@@ -80,19 +86,19 @@ class _NuevaRutaState extends State<NuevaRuta> {
   void setMapPins() {
     setState(() {
       _markers.add(Marker(
-        markerId: MarkerId(widget.list[widget.index]['nombreRutaInicio']),
-        position: LatLng(widget.list[widget.index]['rutaIniLatitud'],
-            widget.list[widget.index]['rutaIniLongitud']),
+        markerId: MarkerId(widget.list[widget.index]['barrio_inicia']['descripcion']),
+        position: LatLng(widget.list[widget.index]['barrio_inicia']['latitud'],
+            widget.list[widget.index]['barrio_inicia']['longitud']),
         infoWindow: InfoWindow(
-            title: widget.list[widget.index]['nombreRutaInicio'].toString()),
+            title: widget.list[widget.index]['barrio_inicia']['descripcion'].toString()),
       ));
       //destino
       _markers.add(Marker(
-        markerId: MarkerId(widget.list[widget.index]['nombreRutaFin']),
-        position: LatLng(widget.list[widget.index]['rutaFinLatitud'],
-            widget.list[widget.index]['rutaFinLongitud']),
+        markerId: MarkerId(widget.list[widget.index]['barrio_termina']['descripcion']),
+        position: LatLng(widget.list[widget.index]['barrio_termina']['latitud'],
+            widget.list[widget.index]['barrio_termina']['longitud']),
         infoWindow: InfoWindow(
-            title: widget.list[widget.index]['nombreRutaFin'].toString()),
+            title: widget.list[widget.index]['barrio_termina']['descripcion'].toString()),
       ));
     });
   }
@@ -100,32 +106,32 @@ class _NuevaRutaState extends State<NuevaRuta> {
   void _centrarMapa() async {
     await _controller.getVisibleRegion();
     var left = min(
-        LatLng(widget.list[widget.index]['rutaIniLatitud'],
-                widget.list[widget.index]['rutaIniLongitud'])
+        LatLng(widget.list[widget.index]['barrio_inicia']['latitud'],
+                widget.list[widget.index]['barrio_inicia']['longitud'])
             .latitude,
-        LatLng(widget.list[widget.index]['rutaFinLatitud'],
-                widget.list[widget.index]['rutaFinLongitud'])
+        LatLng(widget.list[widget.index]['barrio_termina']['latitud'],
+                widget.list[widget.index]['barrio_termina']['longitud'])
             .latitude);
     var right = max(
-        LatLng(widget.list[widget.index]['rutaIniLatitud'],
-                widget.list[widget.index]['rutaIniLongitud'])
+        LatLng(widget.list[widget.index]['barrio_inicia']['latitud'],
+                widget.list[widget.index]['barrio_inicia']['longitud'])
             .latitude,
-        LatLng(widget.list[widget.index]['rutaFinLatitud'],
-                widget.list[widget.index]['rutaFinLongitud'])
+        LatLng(widget.list[widget.index]['barrio_termina']['latitud'],
+                widget.list[widget.index]['barrio_termina']['longitud'])
             .latitude);
     var top = max(
-        LatLng(widget.list[widget.index]['rutaIniLatitud'],
-                widget.list[widget.index]['rutaIniLongitud'])
+        LatLng(widget.list[widget.index]['barrio_inicia']['latitud'],
+                widget.list[widget.index]['barrio_inicia']['longitud'])
             .longitude,
-        LatLng(widget.list[widget.index]['rutaFinLatitud'],
-                widget.list[widget.index]['rutaFinLongitud'])
+        LatLng(widget.list[widget.index]['barrio_termina']['latitud'],
+                widget.list[widget.index]['barrio_termina']['longitud'])
             .longitude);
     var bottom = min(
-        LatLng(widget.list[widget.index]['rutaIniLatitud'],
-                widget.list[widget.index]['rutaIniLongitud'])
+        LatLng(widget.list[widget.index]['barrio_inicia']['latitud'],
+                widget.list[widget.index]['barrio_inicia']['longitud'])
             .longitude,
-        LatLng(widget.list[widget.index]['rutaFinLatitud'],
-                widget.list[widget.index]['rutaFinLongitud'])
+        LatLng(widget.list[widget.index]['barrio_termina']['latitud'],
+                widget.list[widget.index]['barrio_termina']['longitud'])
             .longitude);
     _controller.animateCamera(CameraUpdate.newLatLngBounds(
         LatLngBounds(
@@ -134,7 +140,7 @@ class _NuevaRutaState extends State<NuevaRuta> {
   }
 
   void setPolylines() async {
-    List<PointLatLng>  pathLines = polylinePoints?.decodePolyline(widget.list[widget.index]['ruta']);
+    List<PointLatLng>  pathLines = polylinePoints?.decodePolyline(widget.list[widget.index]['recorridoRuta']);
     /*PolylineResult result = await polylinePoints?.getRouteBetweenCoordinates(
       googleAPIKey,
       PointLatLng(SOURCE_LOCATION.latitude, SOURCE_LOCATION.longitude),

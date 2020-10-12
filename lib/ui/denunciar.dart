@@ -179,7 +179,6 @@ class _CalificarElServcioMainState extends State<Denunciar> {
                       ),
                       color: Color(0xFFffb900),
                       onPressed: () {
-                        // TODO: Show the next page (101)
                       },
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
