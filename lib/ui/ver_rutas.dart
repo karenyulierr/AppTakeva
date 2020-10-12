@@ -18,7 +18,7 @@ class _ListRutasState extends State<ListRutas> {
   List data;
 
   Future<List> getData() async {
-    final response = await http.get("http://192.168.0.101:8000/api/rutas");
+    final response = await http.get("http://192.168.0.106:8000/api/rutas");
     return json.decode(response.body);
   }
 
