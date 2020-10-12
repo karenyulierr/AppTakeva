@@ -4,8 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 
 class DbRutas {
-  String serverUrl = "http://192.168.0.101:8000/api";
-  String serverUrlrutas = "http://192.168.0.101:8000/api/rutas";
+  String serverUrl = "http://192.168.0.106:8000/api";
+  String serverUrlrutas = "http://192.168.0.106:8000/api/rutas";
 
   var status;
 
